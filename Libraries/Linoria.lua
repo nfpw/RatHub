@@ -2920,29 +2920,6 @@ do
     Library:MakeDraggable(KeybindOuter);
 end;
 
-local ValuesOuter = Library:Create('Frame', {
-    AnchorPoint = Vector2.new(1, 0);
-    BackgroundTransparency = 1;
-    BackgroundColor3 = Library.BackgroundColor;
-    Position = UDim2.new(1, -10, 0, 10);
-    Size = UDim2.new(0, 210, 0, 20);
-    Visible = false;
-    ZIndex = 100;
-    Parent = ScreenGui;
-});
-
-Library.ValuesOuter = ValuesOuter;
-
-local ValuesInner = Library:Create('Frame', {
-    BackgroundTransparency = 1;
-    Size = UDim2.new(1, 0, 1, 0);
-    BackgroundColor3 = Library.BackgroundColor;
-    BorderSizePixel = 3;
-    BorderColor3 = Library.AccentColor;
-    ZIndex = 101;
-    Parent = ValuesOuter;
-});
-
 local ColorFrame = Library:Create('Frame', {
     BackgroundColor3 = Library.AccentColor;
     BorderSizePixel = 0;
@@ -2956,8 +2933,37 @@ Library:AddToRegistry(ColorFrame, {
     BackgroundColor3 = 'AccentColor';
 }, true);
 
+local ValuesContainer = Library:Create('Frame', {
+    BackgroundTransparency = 1;
+    Size = UDim2.new(1, 0, 1, -20);
+    Position = UDim2.new(0, 0, 0, 5);
+    BackgroundColor3 = Library.BackgroundColor;
+    ZIndex = 1;
+    Parent = ValuesInner;
+});
+
+Library:Create('UIListLayout', {
+    FillDirection = Enum.FillDirection.Vertical;
+    SortOrder = Enum.SortOrder.LayoutOrder;
+    Padding = UDim.new(0, 1);
+    Parent = ValuesContainer;
+});
+
+Library:Create('UIPadding', {
+    PaddingLeft = UDim.new(0, 5),
+    Parent = ValuesContainer,
+});
+
 function Library:SetWatermarkVisibility(Bool)
     Library.Watermark.Visible = Bool;
+end;
+
+function Library:SetWatermark(Text)
+    local X, Y = Library:GetTextBounds(Text, Library.Font, 14);
+    Library.Watermark.Size = UDim2.new(0, X + 15, 0, (Y * 1.5) + 3);
+    Library:SetWatermarkVisibility(true)
+
+    Library.WatermarkText.Text = Text;
 end;
 
 function Library:SetWatermark(Text)
