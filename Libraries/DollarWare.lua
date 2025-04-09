@@ -5472,6 +5472,11 @@ do
         dropdown.refresh = dropdown.setOptions
         
         dropdown.addOption = function(self, option)
+            -- Convert string or number to option table
+            if type(option) ~= "table" then
+                option = {text = tostring(option), value = option}
+            end
+
             if type(option) == "string" then
                 option = {text = option, value = option}
             end
@@ -5564,23 +5569,38 @@ do
         end
         
         dropdown.selectOption = function(self, option)
-            -- Find the option if string was passed
-            if type(option) == "string" then
+            -- Find the option if string or number was passed
+            local selectedOption = option
+            if type(option) == "string" or type(option) == "number" then
                 for _, opt in ipairs(self.options) do
                     if opt.value == option then
-                        option = opt
+                        selectedOption = opt
                         break
                     end
                 end
             end
             
+            -- Make sure we're working with a valid option table
+            if type(selectedOption) ~= "table" then
+                -- Create a valid option table if we don't have one
+                if type(option) == "string" then
+                    selectedOption = {text = option, value = option}
+                elseif type(option) == "number" then
+                    selectedOption = {text = tostring(option), value = option}
+                else
+                    -- Fallback for unknown types
+                    return -- exit if we can't create a valid option
+                end
+            end
+            
             -- Update selected option
-            self.selectedOption = option
+            self.selectedOption = selectedOption
             
             -- Update label
-            if option then
-                self.instances.label.Text = option.text
-                self:fireEvent('onSelect', option.value, option.text)
+            if selectedOption and selectedOption.text then
+                self.instances.label.Text = selectedOption.text
+                -- Make sure we properly call the event with appropriate parameters
+                self:fireEvent('onSelect', selectedOption.value, selectedOption.text)
             else
                 self.instances.label.Text = self.name
             end
@@ -5669,6 +5689,15 @@ do
             return new
         end
         
+        dropdown:bindToEvent('onSelect', function(value, text)
+            print("Selected:", text, value)
+            ui.notify({
+                title = 'Dropdown',
+                message = 'Selected: ' .. tostring(text) .. ' (Value: ' .. tostring(value) .. ')',
+                duration = 3
+            })
+        end)
+
         elemClasses.section.addDropdown = function(self, settings) 
             if (not typeof(settings) == 'table') then
                 return error('expected type table for settings', 2) 
