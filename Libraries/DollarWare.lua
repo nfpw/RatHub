@@ -1,3 +1,7 @@
+--[[
+    Dropdown and Multi Dropdown added by @nfpw
+    The Orginal Github: https://github.com/topitbopit/dollarware
+]]
 -- DOLLARWARE UI LIBRARY
 -- MADE BY TOPIT
 
@@ -5,11 +9,11 @@
 -- some shit makes no sense but idc enough to fix it
 
 -- started on 5/18/22
-
-local inputService = game:GetService('UserInputService')
-local renderService = game:GetService('RunService')
-local tweenService = game:GetService('TweenService')
-local guiService = game:GetService('GuiService')
+local cloneref = cloneref or function(instance) return instance; end;
+local inputService = cloneref(game:GetService('UserInputService'))
+local renderService = cloneref(game:GetService('RunService'))
+local tweenService = cloneref(game:GetService('TweenService'))
+local guiService = cloneref(game:GetService('GuiService'))
 
 -- tween(object, {Property = 'value'}, 0.2, 1)
 local tween
@@ -306,7 +310,7 @@ local uiScreen = Instance.new('ScreenGui') do
     if (gethui) then
         uiScreen.Parent = gethui()
     else
-        uiScreen.Parent = game:GetService('CoreGui')
+        uiScreen.Parent = cloneref(game:GetService('CoreGui'))
     end
     
     local notifContainer = Instance.new('Frame') do 
@@ -5239,7 +5243,8 @@ do
         -- add class
         label.section = section
     end
-
+    
+    -- DROPDOWN
     do 
         local dropdown = {} do 
             dropdown.__index = dropdown 
@@ -5247,18 +5252,162 @@ do
             
             dropdown.class = 'dropdown'
             
-            -- Keep existing instances code...
             do
-                local instances = {} -- same as original
-                -- All the original instances code remains unchanged...
+                local instances = {} do 
+                    local controlFrame = Instance.new('Frame')
+                    controlFrame.BackgroundTransparency = 1
+                    controlFrame.BackgroundColor3 = Color3.new(0, 1, 1)
+                    controlFrame.Name = '#control'
+                    controlFrame.Size = UDim2.new(1, 0, 0, 20)
+                    controlFrame.Visible = true
+                    controlFrame.ZIndex = 34
+                    
+                    instances.controlFrame = controlFrame
+                    
+                    local clickSensor = Instance.new('TextButton') do 
+                        clickSensor.BackgroundTransparency = 1
+                        clickSensor.Name = '#click-sensor'
+                        clickSensor.Size = UDim2.new(1, 0, 0, 20)
+                        clickSensor.Text = ''
+                        clickSensor.TextTransparency = 1
+                        clickSensor.ZIndex = 34
+                        
+                        clickSensor.Parent = controlFrame
+                        
+                        local button = Instance.new('Frame') do 
+                            button.Active = true
+                            button.AnchorPoint = Vector2.new(1, 0)
+                            button.BackgroundColor3 = theme.Button1
+                            button.Name = '#button'
+                            button.Position = UDim2.new(1, -3, 0, 2)
+                            button.Size = UDim2.new(1, -6, 0, 16)
+                            button.Visible = true
+                            button.ZIndex = 35
+                            
+                            button.Parent = clickSensor
+                            
+                            local round = Instance.new('UICorner') do 
+                                round.CornerRadius = UDim.new(0, rounding and 2 or 0)
+                                round.Name = '#round'
+                                
+                                round.Parent = button
+                            end
+                            
+                            local stroke = Instance.new('UIStroke') do 
+                                stroke.ApplyStrokeMode = 'Border'
+                                stroke.Color = theme.Stroke
+                                stroke.LineJoinMode = 'Round'
+                                stroke.Name = '#stroke'
+                                stroke.Thickness = 1 
+                                
+                                stroke.Parent = button
+                            end
+                            
+                            local label = Instance.new('TextLabel') do 
+                                label.BackgroundTransparency = 1
+                                label.Font = 'SourceSans'
+                                label.Name = '#label'
+                                label.RichText = true
+                                label.Size = UDim2.fromScale(1, 1)
+                                label.Text = 'button'
+                                label.TextColor3 = theme.TextPrimary
+                                label.TextSize = 14
+                                label.TextStrokeColor3 = theme.TextStroke
+                                label.TextStrokeTransparency = 0.8
+                                label.TextTransparency = 0
+                                label.TextWrapped = false
+                                label.TextXAlignment = 'Center'
+                                label.TextYAlignment = 'Center'
+                                label.Visible = true
+                                label.ZIndex = 35
+                                
+                                label.Parent = button
+                            end
+                            
+                            local icon = Instance.new('ImageLabel') do 
+                                icon.AnchorPoint = Vector2.new(1, 0)
+                                icon.BackgroundTransparency = 1
+                                icon.Image = 'rbxassetid://9801473013'
+                                icon.ImageColor3 = theme.Secondary
+                                icon.Name = '#icon'
+                                icon.Position = UDim2.fromScale(1, 0)
+                                icon.Rotation = 0
+                                icon.Size = UDim2.fromOffset(16, 16)
+                                icon.Visible = true
+                                icon.ZIndex = 35
+                                
+                                icon.Parent = button
+                                
+                                local gradient = Instance.new('UIGradient') do 
+                                    gradient.Color = ColorSequence.new(
+                                        theme.ControlGradient1,
+                                        theme.ControlGradient2
+                                    )
+                                    gradient.Rotation = 90
+                                    gradient.Enabled = true
+                                    gradient.Name = '#gradient'
+                                    
+                                    gradient.Parent = icon
+                                end
+                            end
+                        end
+                        
+                        
+                        local menu = Instance.new('ScrollingFrame') do 
+                            menu.BackgroundColor3 = theme.Window3
+                            menu.BorderSizePixel = 0
+                            menu.BottomImage = 'rbxassetid://9416839567'
+                            menu.ClipsDescendants = true
+                            menu.CanvasSize = UDim2.fromOffset(0, 0)
+                            menu.MidImage = 'rbxassetid://9416839567'
+                            menu.Name = '#menu'
+                            menu.Position = UDim2.fromOffset(3, 18)
+                            menu.ScrollBarImageTransparency = 0.9
+                            menu.ScrollBarThickness = 1
+                            menu.ScrollingDirection = 'Y'
+                            menu.ScrollingEnabled = true
+                            menu.Size = UDim2.new(1, -6, 0, 0)
+                            menu.TopImage = 'rbxassetid://9416839567'
+                            menu.ZIndex = 34
+                            
+                            menu.Parent = controlFrame
+                            
+                            local layout = Instance.new('UIListLayout') do 
+                                layout.Padding = UDim.new(0, 4)
+                                layout.Name = '#layout'
+                                layout.FillDirection = 'Vertical'
+                                layout.HorizontalAlignment = 'Center'
+                                layout.VerticalAlignment = 'Top'
+                                layout.SortOrder = 'LayoutOrder'
+                                
+                                layout.Parent = menu
+                            end
+                            
+                            local padding = Instance.new('UIPadding') do 
+                                padding.PaddingTop = UDim.new(0, 4)
+                                padding.Name = '#padding'
+                                padding.Parent = menu
+                            end
+                            
+                            local stroke = Instance.new('UIStroke') do 
+                                stroke.ApplyStrokeMode = 'Border'
+                                stroke.Color = theme.Stroke
+                                stroke.LineJoinMode = 'Round'
+                                stroke.Name = '#stroke'
+                                stroke.Thickness = 1 
+                                
+                                stroke.Parent = menu
+                            end
+                        end
+                    end
+                end
                 dropdown.instances = instances 
             end
             
             dropdown.focused = false
             dropdown.openState = false
-            dropdown.selectedOption = nil
-            dropdown.selectedOptions = {} -- New table to track multiple selections
-            dropdown.multiSelect = false -- Flag to enable/disable multi-selection
+            dropdown.multiSelect = false
+            dropdown.selectedOptions = {}
             
             dropdown.open = function(self) 
                 self.openState = true 
@@ -5274,10 +5423,9 @@ do
                     Rotation = 180,
                     ImageColor3 = theme.Primary
                 }, 0.3, 1)
-                
-                -- Calculate menu size based on number of options
+
                 local optionCount = #self.options
-                local menuHeight = math.min(optionCount * 24 + 8, 150) -- 24px per option, max height of 150px
+                local menuHeight = math.min(optionCount * 24, 150)
                 
                 tween(self.instances.menu, {
                     Size = UDim2.new(1, -6, 0, menuHeight)
@@ -5286,8 +5434,8 @@ do
                     Size = UDim2.new(1, 0, 0, menuHeight + 20)
                 }, 0.2, 1)
                 
-                -- Update canvas size for scrolling
-                self.instances.menu.CanvasSize = UDim2.new(0, 0, 0, optionCount * 24 + 8)
+                self.instances.menu.ScrollBarImageTransparency = 0.9
+                self:updateCanvasSize()
             end
             
             dropdown.close = function(self) 
@@ -5310,378 +5458,292 @@ do
                 tween(self.instances.controlFrame, {
                     Size = UDim2.new(1, 0, 0, 20)
                 }, 0.2, 1)
+                self.instances.menu.ScrollBarImageTransparency = 1
             end
             
             dropdown.isOpen = function(self) 
                 return self.openState 
             end
             
+            dropdown.updateCanvasSize = function(self)
+                local menu = self.instances.menu
+                local layout = menu['#layout']
+                local contentHeight = layout.AbsoluteContentSize.Y + 8 -- Add some padding
+                menu.CanvasSize = UDim2.new(0, 0, 0, contentHeight)
+            end
+            
+            dropdown.updateDisplayText = function(self)
+                local selectedText = ""
+                local selectedCount = 0
+                
+                if self.multiSelect then
+                    for optionValue, selected in pairs(self.selectedOptions) do
+                        if selected then
+                            selectedCount = selectedCount + 1
+                            if selectedText == "" then
+                                selectedText = optionValue
+                            else
+                                if selectedCount > 2 then
+                                    selectedText = nil
+                                else
+                                    selectedText = selectedText .. ", " .. optionValue
+                                end
+                            end
+                        end
+                    end
+                    if selectedCount > 2 then
+                        selectedText = selectedCount .. " selected"
+                    end
+                    
+                    if selectedCount == 0 then
+                        selectedText = "None"
+                    end
+                else
+                    for optionValue, selected in pairs(self.selectedOptions) do
+                        if selected then
+                            selectedText = optionValue
+                            break
+                        end
+                    end
+                    
+                    if selectedText == "" then
+                        selectedText = "None"
+                    end
+                end
+                
+                self.instances.label.Text = self.name .. ": " .. selectedText
+            end
+            
             dropdown.setOptions = function(self, newOptions) 
                 for i, opt in ipairs(self.options) do 
                     self:removeOption(opt)
                 end
+                self.selectedOptions = {}
                 for i, opt in ipairs(newOptions) do 
                     self:addOption(opt)
                 end
+                self:updateDisplayText()
+                return self
             end
-    
+            
             dropdown.refresh = dropdown.setOptions
             
-            dropdown.addOption = function(self, option)
-                -- Convert string or number to option table
-                if type(option) ~= "table" then
-                    option = {text = tostring(option), value = option}
-                end
-    
-                if type(option) == "string" then
-                    option = {text = option, value = option}
-                end
+            dropdown.createOptionButton = function(self, optionValue)
+                local optionButton = Instance.new('TextButton')
+                optionButton.Name = optionValue
+                optionButton.Size = UDim2.new(1, -8, 0, 20)
+                optionButton.BackgroundColor3 = theme.Button1
+                optionButton.Text = ""
+                optionButton.ZIndex = 36
                 
-                -- Create option button
-                local optButton = Instance.new("TextButton")
-                optButton.BackgroundColor3 = theme.Button1
-                optButton.Size = UDim2.new(1, -8, 0, 20)
-                optButton.Font = Enum.Font.SourceSans
-                optButton.TextColor3 = theme.TextPrimary
-                optButton.TextSize = 14
-                optButton.Text = option.text
-                optButton.Name = "Option_" .. tostring(option.value)
-                optButton.ZIndex = 36
-                optButton.Parent = self.instances.menu
-                
-                -- Add corner and stroke
                 local round = Instance.new('UICorner')
                 round.CornerRadius = UDim.new(0, rounding and 2 or 0)
-                round.Parent = optButton
+                round.Name = '#round'
+                round.Parent = optionButton
                 
                 local stroke = Instance.new('UIStroke')
                 stroke.ApplyStrokeMode = 'Border'
                 stroke.Color = theme.Stroke
                 stroke.LineJoinMode = 'Round'
+                stroke.Name = '#stroke'
                 stroke.Thickness = 1
-                stroke.Parent = optButton
+                stroke.Parent = optionButton
                 
-                -- Create selection indicator for multi-select
-                local indicator = Instance.new('Frame')
-                indicator.Name = "#indicator"
-                indicator.Size = UDim2.new(0, 16, 0, 16)
-                indicator.Position = UDim2.new(0, 4, 0.5, 0)
-                indicator.AnchorPoint = Vector2.new(0, 0.5)
-                indicator.BackgroundColor3 = theme.Button1
-                indicator.BorderSizePixel = 0
-                indicator.Visible = self.multiSelect
-                indicator.ZIndex = 37
-                indicator.Parent = optButton
-                
-                local indStroke = Instance.new('UIStroke')
-                indStroke.ApplyStrokeMode = 'Border'
-                indStroke.Color = theme.Stroke
-                indStroke.LineJoinMode = 'Round' 
-                indStroke.Thickness = 1
-                indStroke.Parent = indicator
-                
-                local indRound = Instance.new('UICorner')
-                indRound.CornerRadius = UDim.new(0, 2)
-                indRound.Parent = indicator
-                
-                local check = Instance.new('TextLabel')
-                check.BackgroundTransparency = 1
-                check.Font = Enum.Font.SourceSansBold
-                check.Size = UDim2.fromScale(1, 1)
-                check.Text = "✓"
-                check.TextColor3 = theme.Primary
-                check.TextSize = 14
-                check.TextTransparency = 1
-                check.ZIndex = 38
-                check.Parent = indicator
-                
-                option.indicator = indicator
-                option.check = check
-                
-                -- Adjust text position if multi-select is enabled
+                local label = Instance.new('TextLabel')
+                label.BackgroundTransparency = 1
+                label.Font = 'SourceSans'
+                label.Name = '#label'
+                label.Size = UDim2.fromScale(1, 1)
+                label.Text = optionValue
+                label.TextColor3 = theme.TextPrimary
+                label.TextSize = 14
+                label.TextStrokeColor3 = theme.TextStroke
+                label.TextStrokeTransparency = 0.8
+                label.TextXAlignment = 'Left'
+                label.TextYAlignment = 'Center'
+                label.Position = UDim2.new(0, 4, 0, 0)
+                label.ZIndex = 36
+                label.Parent = optionButton
+
                 if self.multiSelect then
-                    optButton.Text = "    " .. option.text
-                    optButton.TextXAlignment = Enum.TextXAlignment.Left
-                end
-                
-                -- Store option data
-                option.instance = optButton
-                option.selected = false
-                table.insert(self.options, option)
-                
-                -- Add mouse events
-                optButton.MouseEnter:Connect(function()
-                    tween(optButton, {BackgroundColor3 = theme.Button2}, 0.2, 1)
-                    tween(stroke, {Color = theme.StrokeHover}, 0.2, 1)
-                    if self.multiSelect then
-                        tween(indStroke, {Color = theme.StrokeHover}, 0.2, 1)
+                    local checkbox = Instance.new('Frame')
+                    checkbox.Name = '#checkbox'
+                    checkbox.Size = UDim2.new(0, 14, 0, 14)
+                    checkbox.Position = UDim2.new(1, -18, 0.5, -7)
+                    checkbox.BackgroundColor3 = theme.Window2
+                    checkbox.BackgroundTransparency = 0
+                    checkbox.ZIndex = 36
+                    checkbox.Parent = optionButton
+                    
+                    local checkboxRound = Instance.new('UICorner')
+                    checkboxRound.CornerRadius = UDim.new(0, 2)
+                    checkboxRound.Parent = checkbox
+                    
+                    local checkboxStroke = Instance.new('UIStroke')
+                    checkboxStroke.ApplyStrokeMode = 'Border'
+                    checkboxStroke.Color = theme.Stroke
+                    checkboxStroke.Thickness = 1
+                    checkboxStroke.Parent = checkbox
+                    
+                    local checkmark = Instance.new('ImageLabel')
+                    checkmark.Name = '#checkmark'
+                    checkmark.BackgroundTransparency = 1
+                    checkmark.Image = 'rbxassetid://9801399057'
+                    checkmark.ImageColor3 = theme.TextPrimary
+                    checkmark.Size = UDim2.new(0, 12, 0, 12)
+                    checkmark.Position = UDim2.new(0.5, 0, 0.5, 0)
+                    checkmark.AnchorPoint = Vector2.new(0.5, 0.5)
+                    checkmark.Visible = false
+                    checkmark.ZIndex = 37
+                    checkmark.Parent = checkbox
+
+                    if self.selectedOptions[optionValue] then
+                        checkbox.BackgroundColor3 = theme.Primary
+                        checkbox.BackgroundTransparency = 0.8
+                        checkmark.Visible = true
                     end
+                end
+
+                optionButton.MouseEnter:Connect(function()
+                    tween(optionButton, {BackgroundColor3 = theme.Button2}, 0.2, 1)
+                    tween(optionButton['#stroke'], {Color = theme.StrokeHover}, 0.2, 1)
                 end)
                 
-                optButton.MouseLeave:Connect(function()
-                    tween(optButton, {BackgroundColor3 = theme.Button1}, 0.2, 1)
-                    tween(stroke, {Color = theme.Stroke}, 0.2, 1)
-                    if self.multiSelect then
-                        tween(indStroke, {Color = theme.Stroke}, 0.2, 1)
+                optionButton.MouseLeave:Connect(function()
+                    if not self.selectedOptions[optionValue] then
+                        tween(optionButton, {BackgroundColor3 = theme.Button1}, 0.2, 1)
+                    else
+                        tween(optionButton, {BackgroundColor3 = theme.Button3}, 0.2, 1)
                     end
+                    tween(optionButton['#stroke'], {Color = theme.Stroke}, 0.2, 1)
                 end)
                 
-                optButton.MouseButton1Click:Connect(function()
-                    if self.multiSelect then
-                        self:toggleOption(option)
-                        -- Execute callback if provided
-                        if option.callback then
-                            option.callback(option.value, option.selected)
-                        end
-                    else
-                        self:selectOption(option)
-                        self:close()
-                        -- Execute callback if provided
-                        if option.callback then
-                            option.callback(option.value)
-                        end
-                    end
+                optionButton.MouseButton1Click:Connect(function()
+                    self:selectOption(optionValue)
                 end)
                 
-                -- Update menu canvas size
-                self:updateCanvasSize()
-                
-                return option
+                return optionButton
             end
             
-            -- New method to toggle selection for multi-select mode
-            dropdown.toggleOption = function(self, option)
-                -- Find the option if string or number was passed
-                local targetOption = option
-                if type(option) == "string" or type(option) == "number" then
-                    for _, opt in ipairs(self.options) do
-                        if opt.value == option then
-                            targetOption = opt
-                            break
-                        end
-                    end
-                end
-                
-                if type(targetOption) ~= "table" or not targetOption.instance then
-                    return
-                end
-                
-                -- Toggle selection state
-                targetOption.selected = not targetOption.selected
-                
-                -- Update visual state
-                if targetOption.selected then
-                    -- Add to selected options
-                    table.insert(self.selectedOptions, targetOption)
-                    tween(targetOption.indicator, {BackgroundColor3 = theme.Primary}, 0.2, 1)
-                    tween(targetOption.check, {TextTransparency = 0}, 0.2, 1)
-                else
-                    -- Remove from selected options
-                    for i, opt in ipairs(self.selectedOptions) do
-                        if opt.value == targetOption.value then
-                            table.remove(self.selectedOptions, i)
-                            break
-                        end
-                    end
-                    tween(targetOption.indicator, {BackgroundColor3 = theme.Button1}, 0.2, 1)
-                    tween(targetOption.check, {TextTransparency = 1}, 0.2, 1)
-                end
-                
-                -- Update label text
-                self:updateLabel()
-                
-                -- Fire event
-                self:fireEvent('onSelect', self:getValues(), self:getTexts())
+            dropdown.addOption = function(self, optionValue)
+                table.insert(self.options, optionValue)
+                local optionButton = self:createOptionButton(optionValue)
+                optionButton.Parent = self.instances.menu
+                self:updateCanvasSize()    
+                return self
             end
             
-            -- Update label based on selection(s)
-            dropdown.updateLabel = function(self)
-                if not self.multiSelect then
-                    -- Single selection mode
-                    if self.selectedOption and self.selectedOption.text then
-                        self.instances.label.Text = self.selectedOption.text
-                    else
-                        self.instances.label.Text = self.name
-                    end
-                else
-                    -- Multi selection mode
-                    local count = #self.selectedOptions
-                    if count == 0 then
-                        self.instances.label.Text = self.name
-                    elseif count == 1 then
-                        self.instances.label.Text = self.selectedOptions[1].text
-                    else
-                        self.instances.label.Text = self.name .. " (" .. count .. " selected)"
-                    end
-                end
-            end
-            
-            dropdown.removeOption = function(self, option)
-                -- Find the option in our list
-                local index
+            dropdown.removeOption = function(self, optionValue)
                 for i, opt in ipairs(self.options) do
-                    if opt == option or opt.value == option then
-                        index = i
+                    if opt == optionValue then
+                        table.remove(self.options, i)
                         break
                     end
                 end
-                
-                if index then
-                    local opt = self.options[index]
-                    
-                    -- Destroy the instance
-                    if opt.instance then
-                        opt.instance:Destroy()
-                    end
-                    
-                    -- Remove from options table
-                    table.remove(self.options, index)
-                    
-                    -- Remove from selected options if it was selected
-                    if self.multiSelect then
-                        for i, selected in ipairs(self.selectedOptions) do
-                            if selected.value == opt.value then
-                                table.remove(self.selectedOptions, i)
-                                break
-                            end
-                        end
-                    elseif self.selectedOption == opt then
-                        self.selectedOption = nil
-                    end
-                    
-                    -- Update label
-                    self:updateLabel()
-                    
-                    -- Update canvas size
-                    self:updateCanvasSize()
+                self.selectedOptions[optionValue] = nil
+                local optionButton = self.instances.menu:FindFirstChild(optionValue)
+                if optionButton then
+                    optionButton:Destroy()
                 end
+                self:updateDisplayText()
+                self:updateCanvasSize()
+                return self
             end
             
-            dropdown.updateCanvasSize = function(self)
-                local optionCount = #self.options
-                self.instances.menu.CanvasSize = UDim2.new(0, 0, 0, optionCount * 24 + 8)
-            end
-            
-            dropdown.selectOption = function(self, option)
-                -- Find the option if string or number was passed
-                local selectedOption = option
-                if type(option) == "string" or type(option) == "number" then
-                    for _, opt in ipairs(self.options) do
-                        if opt.value == option then
-                            selectedOption = opt
-                            break
+            dropdown.selectOption = function(self, optionValue)
+                local optionButton = self.instances.menu:FindFirstChild(optionValue)
+                if not optionButton then return end
+                if self.multiSelect then
+                    self.selectedOptions[optionValue] = not self.selectedOptions[optionValue]
+                    local checkbox = optionButton:FindFirstChild('#checkbox')
+                    if checkbox then
+                        local checkmark = checkbox:FindFirstChild('#checkmark')
+                        if checkmark then
+                            checkmark.Visible = self.selectedOptions[optionValue]
+                        end
+                        if self.selectedOptions[optionValue] then
+                            tween(checkbox, {BackgroundColor3 = theme.Primary, BackgroundTransparency = 0.7}, 0.2, 1)
+                            checkmark.Visible = true
+                        else
+                            tween(checkbox, {BackgroundColor3 = theme.Window2, BackgroundTransparency = 0}, 0.2, 1)
+                            checkmark.Visible = false
                         end
                     end
-                end
-                
-                -- Make sure we're working with a valid option table
-                if type(selectedOption) ~= "table" then
-                    -- Create a valid option table if we don't have one
-                    if type(option) == "string" then
-                        selectedOption = {text = option, value = option}
-                    elseif type(option) == "number" then
-                        selectedOption = {text = tostring(option), value = option}
+                    if self.selectedOptions[optionValue] then
+                        tween(optionButton, {BackgroundColor3 = theme.Button3}, 0.2, 1)
                     else
-                        -- Fallback for unknown types
-                        return -- exit if we can't create a valid option
+                        tween(optionButton, {BackgroundColor3 = theme.Button1}, 0.2, 1)
                     end
-                end
-                
-                -- Update selected option
-                self.selectedOption = selectedOption
-                
-                -- Update label and fire event
-                self:updateLabel()
-                
-                -- Make sure we properly call the event with appropriate parameters
-                self:fireEvent('onSelect', selectedOption.value, selectedOption.text)
-            end
-            
-            -- Get the current selection value (single mode) or array of values (multi mode)
-            dropdown.getValue = function(self)
-                if not self.multiSelect then
-                    return self.selectedOption and self.selectedOption.value or nil
+                    
                 else
-                    return self:getValues()
+                    for _, opt in ipairs(self.options) do
+                        local btn = self.instances.menu:FindFirstChild(opt)
+                        if btn then
+                            tween(btn, {BackgroundColor3 = theme.Button1}, 0.2, 1)
+                        end
+                        self.selectedOptions[opt] = false
+                    end
+                    self.selectedOptions[optionValue] = true
+                    tween(optionButton, {BackgroundColor3 = theme.Button3}, 0.2, 1)
+                    self:close()
                 end
+                self:updateDisplayText()
+                self:fireEvent('onSelection', optionValue, self.selectedOptions[optionValue])
+                self:fireEvent('onChange', self:getSelected())
+                
+                return self
             end
             
-            -- Get array of selected values in multi-select mode
-            dropdown.getValues = function(self)
-                local values = {}
-                for _, opt in ipairs(self.selectedOptions) do
-                    table.insert(values, opt.value)
-                end
-                return values
-            end
-            
-            -- Get text of selected option (single mode) or array of texts (multi mode)
-            dropdown.getText = function(self)
-                if not self.multiSelect then
-                    return self.selectedOption and self.selectedOption.text or nil
+            dropdown.getSelected = function(self)
+                if self.multiSelect then
+                    local selected = {}
+                    for optValue, isSelected in pairs(self.selectedOptions) do
+                        if isSelected then
+                            table.insert(selected, optValue)
+                        end
+                    end
+                    return selected
                 else
-                    return self:getTexts()
+                    for optValue, isSelected in pairs(self.selectedOptions) do
+                        if isSelected then
+                            return optValue
+                        end
+                    end
+                    return nil
                 end
             end
             
-            -- Get array of selected texts in multi-select mode
-            dropdown.getTexts = function(self)
-                local texts = {}
-                for _, opt in ipairs(self.selectedOptions) do
-                    table.insert(texts, opt.text)
-                end
-                return texts
-            end
-            
-            -- Set multi-select mode
             dropdown.setMultiSelect = function(self, enabled)
-                if self.multiSelect == enabled then return end
-                
-                self.multiSelect = enabled
-                
-                -- Reset selections when switching modes
-                if enabled then
-                    -- Convert single selection to multi selection if any
-                    self.selectedOptions = {}
-                    if self.selectedOption then
-                        table.insert(self.selectedOptions, self.selectedOption)
-                        self.selectedOption.selected = true
+                if self.multiSelect ~= enabled then
+                    self.multiSelect = enabled
+                    local currentOptions = self.options
+                    local currentSelections = self.selectedOptions
+                    for _, child in ipairs(self.instances.menu:GetChildren()) do
+                        if child:IsA("TextButton") then
+                            child:Destroy()
+                        end
                     end
-                else
-                    -- Convert multi selection to single selection (take first if multiple)
-                    self.selectedOption = self.selectedOptions[1] or nil
                     self.selectedOptions = {}
-                end
-                
-                -- Update all option visuals
-                for _, opt in ipairs(self.options) do
-                    if opt.indicator then
-                        opt.indicator.Visible = enabled
-                        
-                        -- Update selection state visual
-                        if enabled then
-                            opt.instance.Text = "    " .. opt.text
-                            opt.instance.TextXAlignment = Enum.TextXAlignment.Left
-                            
-                            -- Check if this option is selected
-                            opt.selected = false
-                            for _, selected in ipairs(self.selectedOptions) do
-                                if selected.value == opt.value then
-                                    opt.selected = true
-                                    tween(opt.indicator, {BackgroundColor3 = theme.Primary}, 0.2, 1)
-                                    tween(opt.check, {TextTransparency = 0}, 0.2, 1)
-                                    break
+                    for _, opt in ipairs(currentOptions) do
+                        self:addOption(opt)
+                        if currentSelections[opt] then
+                            self.selectedOptions[opt] = true
+                            local optionButton = self.instances.menu:FindFirstChild(opt)
+                            if optionButton then
+                                tween(optionButton, {BackgroundColor3 = theme.Button3}, 0.2, 1)
+                                if self.multiSelect then
+                                    local checkbox = optionButton:FindFirstChild('#checkbox')
+                                    local checkmark = checkbox:FindFirstChild('#checkmark')
+                                    checkbox.BackgroundColor3 = theme.Primary
+                                    checkbox.BackgroundTransparency = 0.8
+                                    checkmark.Visible = true
                                 end
                             end
-                        else
-                            opt.instance.Text = opt.text
-                            opt.instance.TextXAlignment = Enum.TextXAlignment.Center
                         end
                     end
+                    self:updateDisplayText()
                 end
-                
-                -- Update label
-                self:updateLabel()
+                return self
             end
             
             dropdown.click = function(self) 
@@ -5691,7 +5753,6 @@ do
                 else
                     self:close()
                 end
-                
                 return self
             end
             dropdown.__hotkeyFunc = dropdown.click
@@ -5701,7 +5762,6 @@ do
                     MouseEnter = function(inst, self) 
                         self.focused = true
                         self:showTooltip()
-                        
                         local frame = self.instances.button
                         if (self.openState) then
                             tween(frame, {BackgroundColor3 = theme.Button4}, 0.2, 1)
@@ -5734,11 +5794,6 @@ do
                 new.options = {}
                 new.selectedOptions = {}
                 new.multiSelect = false
-                new.events = {
-                    onOpen = {},
-                    onClose = {},
-                    onSelect = {}
-                }
                 
                 local instances = {}
                 instances.controlFrame = self.instances.controlFrame:Clone()
@@ -5747,6 +5802,7 @@ do
                 instances.label = instances.button['#label']
                 instances.icon = instances.button['#icon']
                 instances.menu = instances.controlFrame['#menu']
+                instances.menu.ScrollBarImageTransparency = 1
                 
                 for i, signals in pairs(self.signals) do 
                     local inst = instances[i]
@@ -5760,7 +5816,7 @@ do
                 new.instances = instances
                 return new
             end
-    
+            
             elemClasses.section.addDropdown = function(self, settings) 
                 if (not typeof(settings) == 'table') then
                     return error('expected type table for settings', 2) 
@@ -5768,9 +5824,7 @@ do
                 
                 local s_title = settings.text or 'nil'
                 local s_options = settings.options or {}
-                local s_default = settings.default
                 local s_multiSelect = settings.multiSelect or false
-                local s_callback = settings.callback
                 
                 local new = dropdown:new()
                 new.section = self 
@@ -5779,40 +5833,9 @@ do
                 
                 new.instances.label.Text = s_title
                 new.instances.controlFrame.Parent = self.instances.controlMenu
-                
-                -- Set multi-select mode first (before adding options)
                 new:setMultiSelect(s_multiSelect)
-                
-                -- Add options with callbacks if provided
                 for _, opt in ipairs(s_options) do
-                    local option
-                    if type(opt) == "table" and opt.callback then
-                        option = new:addOption(opt)
-                    else
-                        option = new:addOption(opt)
-                        -- Apply global callback to this option if provided
-                        if s_callback then
-                            option.callback = s_callback
-                        end
-                    end
-                end
-                
-                -- Set default value(s) if provided
-                if s_default then
-                    if s_multiSelect and type(s_default) == "table" then
-                        -- For multi-select, default can be an array of values to select
-                        for _, value in ipairs(s_default) do
-                            for _, opt in ipairs(new.options) do
-                                if opt.value == value then
-                                    new:toggleOption(opt)
-                                    break
-                                end
-                            end
-                        end
-                    else
-                        -- For single-select or fallback
-                        new:selectOption(s_default)
-                    end
+                    new:addOption(opt)
                 end
                 
                 return new
@@ -7756,9 +7779,7 @@ do
         if (typeof(theme) ~= 'table') then
             return error('expected type table for theme', 2)
         end
-        
         theme = newTheme 
-        
     end
     
     
