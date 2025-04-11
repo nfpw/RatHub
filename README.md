@@ -5,4 +5,4 @@
 | Ui | 🟢 
 | Universal | 🔴
 | Games | 🔴
-| Loader | 🔴  
+| Loader | 🟢  
