@@ -1,6 +1,5 @@
 local shared = getgenv() or shared or _G; shared.RatHubLaunch = {
     Key = nil;
-    Theme = "grape";
     Library = "DollarWare"; -- DollarWare, Linoria, Luna
     Debug = false;
     Execute = function(string)
