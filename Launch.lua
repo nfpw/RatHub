@@ -1,5 +1,5 @@
 local shared = getgenv() or shared or _G; shared.RatHubLaunch = {
-    Key = "ineedtosleep";
+    Key = "WaowSoSigmanfpw";
     Library = "DollarWare"; -- DollarWare, Linoria, Luna
     Debug = false;
     Execute = function(string)
