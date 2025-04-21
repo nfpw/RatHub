@@ -13,7 +13,6 @@ local G2L = {};
 -- StarterGui.Bracket
 G2L["1"] = Instance.new("Folder");
 G2L["1"]["Name"] = "Bracket";
-G2L["1"]["Parent"] = gethui() or cloneref(game:GetService("CoreGui"));
 
 -- StarterGui.Bracket.Bracket
 G2L["2"] = Instance.new("ScreenGui", G2L["1"]);
